@@ -1,69 +1,53 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func StringToInt(numberInString string) (int, error) {
-	result, err := strconv.Atoi(numberInString)
-	if err != nil {
-		return 0, err
-	}
-	return result, nil
-}
-
 func main() {
-	file, err := os.Open("2015/day02/input.txt")
-	check(err)
-	defer file.Close()
-
-	var all_text_split [][]string
-	var final_result int
-
-	scanner := bufio.NewScanner(file)
-
-	for scanner.Scan() {
-		text := scanner.Text()
-
-		text_split := strings.Split(text, "x")
-
-		all_text_split = append(all_text_split, text_split)
+	// Utilisation de os.ReadFile
+	file, err := os.ReadFile("2015/day02/input_test.txt")
+	// Gestion des erreurs
+	if err != nil {
+		panic(err)
 	}
+	// Appel de la method part1 et conversion du file en string. return le résultat
+	result := part1(string(file))
+	// Affichage du résultat de la part1
+	fmt.Println(result)
+}
 
-	for _, v := range all_text_split {
-		numberone, err := StringToInt(v[0])
-		check(err)
-		numbertwo, err := StringToInt(v[1])
-		check(err)
-		numberthree, err := StringToInt(v[2])
-		check(err)
-
-		x := numbertwo * numberone
-		y := numberthree * numbertwo
-		z := numberthree * numberone
-
-		smallest := x
-		if y < smallest {
-			smallest = y
-		}
-		if z < smallest {
-			smallest = z
-		}
-
-		calcul := 2*x + 2*y + 2*z
-
-		final_result += calcul
-		final_result += smallest
+// Comparer deux entiers pour trouver le plus petit
+func min(a, b int) int {
+	if a < b {
+		return a
 	}
-	fmt.Println(final_result)
+	return b
+}
+
+func part1(input string) int {
+	// Déclaration de la variable totalSqFt pour stocker le nombre total de pieds carrés nécessaires
+	var totalSqFt int
+
+	// Parcourir chaque ligne de la chaîne d'entrée (chaque ligne représente les dimensions d'une boîte)
+	for _, line := range strings.Split(input, "\n") {
+		// Déclaration des variables pour stocker les dimensions de la boîte
+		var x, y, z int
+		// Lecture des dimensions de la boîte à partir de la ligne, en utilisant fmt.Sscanf qui analyse la chaîne selon un format spécifié
+		_, err := fmt.Sscanf(line, "%dx%dx%d", &x, &y, &z)
+		// Gestion des erreurs
+		if err != nil {
+			panic(err)
+		}
+		// Calcul de la surface de la boîte en ajoutant la surface de chaque face (longueur x largeur) multipliée par 2 (car il y a deux côtés identiques par face)
+		totalSqFt += x * y * 2
+		totalSqFt += x * z * 2
+		totalSqFt += z * y * 2
+		// Calcul de la surface minimale nécessaire pour emballer la boîte. Cela correspond à la plus petite surface parmi les six surfaces possibles.
+		totalSqFt += min(min(x*y, y*z), x*z)
+	}
+	// Retourner le nombre total de pieds carrés
+	return totalSqFt
 }
