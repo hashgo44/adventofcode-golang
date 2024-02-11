@@ -14,8 +14,16 @@ func check(e error) {
 	}
 }
 
+func StringToInt(numberInString string) (int, error) {
+	result, err := strconv.Atoi(numberInString)
+	if err != nil {
+		return 0, err
+	}
+	return result, nil
+}
+
 func main() {
-	file, err := os.Open("2015/day02/input_test.txt")
+	file, err := os.Open("2015/day02/input.txt")
 	check(err)
 	defer file.Close()
 
@@ -33,34 +41,29 @@ func main() {
 	}
 
 	for _, v := range all_text_split {
-		numberone, err := strconv.Atoi(v[0])
-		if err != nil {
-			fmt.Println(err)
+		numberone, err := StringToInt(v[0])
+		check(err)
+		numbertwo, err := StringToInt(v[1])
+		check(err)
+		numberthree, err := StringToInt(v[2])
+		check(err)
+
+		x := numbertwo * numberone
+		y := numberthree * numbertwo
+		z := numberthree * numberone
+
+		smallest := x
+		if y < smallest {
+			smallest = y
 		}
-		numbertwo, err := strconv.Atoi(v[1])
-		if err != nil {
-			fmt.Println(err)
-		}
-		numberthree, err := strconv.Atoi(v[2])
-		if err != nil {
-			fmt.Println(err)
+		if z < smallest {
+			smallest = z
 		}
 
-		smallest := numberone
-		if numbertwo < smallest {
-			smallest = numbertwo
-		}
-
-		if numberthree < smallest {
-			smallest = numberthree
-		}
-
-		fmt.Println(smallest, "here")
-		calcul := 2*(numbertwo*numberone) + 2*(numberthree*numbertwo) + 2*(numberthree*numberone)
+		calcul := 2*x + 2*y + 2*z
 
 		final_result += calcul
 		final_result += smallest
-		// fmt.Println(calcul, smallest, calcul+smallest)
 	}
 	fmt.Println(final_result)
 }
