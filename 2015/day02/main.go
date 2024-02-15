@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	// Utilisation de os.ReadFile
+	// Utilisation de os.ReadFile pour lire le contenue du fichier
 	file, err := os.ReadFile("2015/day02/input.txt")
 	// Gestion des erreurs
 	if err != nil {
