@@ -12,9 +12,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	result1 := part1(string(file))
+	result2 := part2(string(file))
+
 	fmt.Println("Part1 : ", result1)
-	part2(string(file))
+	fmt.Println("Part2 : ", result2)
 }
 
 func part1(input string) int {
@@ -44,53 +47,41 @@ func part1(input string) int {
 	return count
 }
 
-func part2(input string) {
-	var slices1 string
-	var slices2 string
-	houseCount := make(map[string]int)
+func part2(input string) int {
+	visited := make(map[[2]int]bool)
+	currentPos := [2]int{0, 0}
 
-	for i, v := range input {
+	santaPos := currentPos
+	robotsantaPos := currentPos
+
+	visited[currentPos] = true
+
+	for i, char := range input {
 		if i%2 == 0 {
-			slices1 += string(v)
+			currentPos = santaPos
 		} else {
-			slices2 += string(v)
+			currentPos = robotsantaPos
+		}
+
+		switch char {
+		case '^':
+			currentPos[1]++
+		case 'v':
+			currentPos[1]--
+		case '>':
+			currentPos[0]++
+		case '<':
+			currentPos[0]--
+		}
+
+		visited[currentPos] = true
+
+		if i%2 == 0 {
+			santaPos = currentPos
+		} else {
+			robotsantaPos = currentPos
 		}
 	}
 
-	// COORDENNER PERE NOEL
-	// visited1 := make(map[string]int)
-	y, x := 0, 0
-	for _, v := range slices1 {
-		switch string(v) {
-		case "^":
-			y++
-		case "v":
-			y--
-		case ">":
-			x++
-		case "<":
-			x--
-		}
-		coords1 := fmt.Sprintf("%d,%d", x, y)
-		houseCount[coords1]++
-	}
-
-	// COORDENNER ROBOT PERE NOEL
-	// visited2 := make(map[string]int)
-	z, w := 0, 0
-	for _, v := range slices2 {
-		switch string(v) {
-		case "^":
-			z++
-		case "v":
-			z--
-		case ">":
-			w++
-		case "<":
-			w--
-		}
-		coords2 := fmt.Sprintf("%d,%d", z, w)
-		houseCount[coords2]++
-	}
-	fmt.Println(len(houseCount))
+	return len(visited)
 }
