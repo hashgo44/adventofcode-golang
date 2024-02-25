@@ -38,6 +38,10 @@ func part1(input string) int {
 	return nice
 }
 
+func part2(input string) int {
+	return 1
+}
+
 func countVowels(str string) int {
 	count := 0
 	vowels := "aeiou"
