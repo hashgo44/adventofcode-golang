@@ -8,12 +8,14 @@ import (
 )
 
 func main() {
-	input, err := os.ReadFile("2015/day05/input.txt")
+	input, err := os.ReadFile("2015/day05/input_test.txt")
 	if err != nil {
 		panic(err)
 	}
-	result := part1(string(input))
-	fmt.Println(result)
+	// result1 := part1(string(input))
+	result2 := part2(string(input))
+	// fmt.Println(result1)
+	fmt.Println(result2)
 }
 
 func part1(input string) int {
@@ -39,7 +41,21 @@ func part1(input string) int {
 }
 
 func part2(input string) int {
-	return 1
+	var nice int
+	for _, line := range strings.Split(input, "\n") {
+		oneLetterWhichRepeats := false
+
+		for i := 0; i < len(line)-2; i++ {
+			if line[i] == line[i+2] {
+				oneLetterWhichRepeats = true
+			}
+		}
+
+		if oneLetterWhichRepeats {
+			nice++
+		}
+	}
+	return nice
 }
 
 func countVowels(str string) int {
