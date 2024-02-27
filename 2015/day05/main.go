@@ -51,6 +51,8 @@ func part2(input string) int {
 			}
 		}
 
+		fmt.Println(line)
+
 		if oneLetterWhichRepeats {
 			nice++
 		}
