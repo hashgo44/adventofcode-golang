@@ -8,13 +8,13 @@ import (
 )
 
 func main() {
-	input, err := os.ReadFile("2015/day05/input_test.txt")
+	input, err := os.ReadFile("2015/day05/input.txt")
 	if err != nil {
 		panic(err)
 	}
-	// result1 := part1(string(input))
+	result1 := part1(string(input))
 	result2 := part2(string(input))
-	// fmt.Println(result1)
+	fmt.Println(result1)
 	fmt.Println(result2)
 }
 
@@ -51,9 +51,16 @@ func part2(input string) int {
 			}
 		}
 
-		fmt.Println(line)
+		pairInLine := false
+		for i := 0; i < len(line)-1; i++ {
+			pair := line[i : i+2]
+			if strings.Count(line, pair) >= 2 {
+				pairInLine = true
+				break
+			}
+		}
 
-		if oneLetterWhichRepeats {
+		if oneLetterWhichRepeats && pairInLine {
 			nice++
 		}
 	}
